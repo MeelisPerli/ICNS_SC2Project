@@ -33,16 +33,21 @@ class Sc2Network():
     def _create_model(self):
         inp = Input(self.inputSize)
         BNorm = BatchNormalization()(inp)
-        d0 = Dense(1024, activation='relu')(BNorm)
-        drop0 = Dropout(0.2)(d0)
-        d1 = Dense(512, activation='tanh')(drop0)
-        drop1 = Dropout(0.25)(d1)
-        d2 = Dense(256, activation='tanh')(drop1)
-        drop2 = Dropout(0.1)(d2)
-        d3 = Dense(128, activation='tanh')(drop2)
+        #d0 = Dense(1024, activation='relu')(BNorm)
+        #drop0 = Dropout(0.2)(d0)
+        #d1 = Dense(512, activation='tanh')(drop0)
+        #drop1 = Dropout(0.25)(d1)
+        #d2 = Dense(256, activation='tanh')(drop1)
+        #drop2 = Dropout(0.1)(d2)
+        #d3 = Dense(128, activation='tanh')(drop2)
+        #drop3 = Dropout(0.1)(d3)
+        d3 = Dense(128, activation='tanh')(BNorm)
         drop3 = Dropout(0.1)(d3)
+        #d4 = Dense(64, activation='tanh')(drop3)
+        #lOut = Dense(6, activation='softmax', name="actionLayer")(d4)
         d4 = Dense(64, activation='tanh')(drop3)
-        lOut = Dense(6, activation='softmax', name="actionLayer")(d4)
+        d5 = Dense(32, activation='tanh')(d4)
+        lOut = Dense(6, activation='softmax', name="actionLayer")(d5)
         model = Model(inputs=inp, outputs=lOut)
         model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
         return model
@@ -51,8 +56,8 @@ class Sc2Network():
     def _create_arg_model_2(self):
         inp = Input(self.inputSize)
         BNorm = BatchNormalization()(inp)
-        d0 = Dense(256, activation='relu')(BNorm)
-        d1 = Dense(128, activation='tanh')(d0)
+        #d0 = Dense(256, activation='relu')(BNorm)
+        d1 = Dense(128, activation='tanh')(BNorm)
         drop1 = Dropout(0.1)(d1)
         d2 = Dense(64, activation='tanh')(drop1)
         d3 = Dense(32, activation='tanh')(d2)
@@ -64,8 +69,8 @@ class Sc2Network():
     def _create_arg_model_3(self):
         inp = Input(self.inputSize)
         BNorm = BatchNormalization()(inp)
-        d0 = Dense(256, activation='relu')(BNorm)
-        d1 = Dense(128, activation='tanh')(d0)
+        #d0 = Dense(256, activation='relu')(BNorm)
+        d1 = Dense(128, activation='tanh')(BNorm)
         drop1 = Dropout(0.1)(d1)
         d2 = Dense(64, activation='tanh')(drop1)
         d3 = Dense(32, activation='tanh')(d2)
@@ -77,8 +82,8 @@ class Sc2Network():
     def _create_arg_model_4(self):
         inp = Input(self.inputSize)
         BNorm = BatchNormalization()(inp)
-        d0 = Dense(256, activation='relu')(BNorm)
-        d1 = Dense(128, activation='relu')(d0)
+        #d0 = Dense(256, activation='relu')(BNorm)
+        d1 = Dense(128, activation='relu')(BNorm)
         #drop1 = Dropout(0.1)(d1)
         d2 = Dense(64, activation='relu')(d1)
         d3 = Dense(32, activation='relu')(d2)
@@ -90,8 +95,8 @@ class Sc2Network():
     def _create_arg_model_12(self):
         inp = Input(self.inputSize)
         BNorm = BatchNormalization()(inp)
-        d0 = Dense(256, activation='relu')(BNorm)
-        d1 = Dense(128, activation='relu')(d0)
+        #d0 = Dense(256, activation='relu')(BNorm)
+        d1 = Dense(128, activation='relu')(BNorm)
         drop1 = Dropout(0.1)(d1)
         d2 = Dense(64, activation='relu')(drop1)
         d3 = Dense(32, activation='relu')(d2)
@@ -103,8 +108,8 @@ class Sc2Network():
     def _create_arg_model_331(self):
         inp = Input(self.inputSize)
         BNorm = BatchNormalization()(inp)
-        d0 = Dense(512, activation='relu')(BNorm)
-        d1 = Dense(256, activation='relu')(d0)
+        #d0 = Dense(512, activation='relu')(BNorm)
+        d1 = Dense(256, activation='relu')(BNorm)
         drop1 = Dropout(0.25)(d1)
         d2 = Dense(128, activation='tanh')(drop1)
         drop2 = Dropout(0.1)(d2)
@@ -116,7 +121,7 @@ class Sc2Network():
 
     def train_model(self, epochs=5, batch_size=32, min_score=25,
                     verbose=0):
-        X, y, X2, y2 = get_training_data_from_file(min_score, 35)
+        X, y, X2, y2 = get_training_data_from_file(min_score, 1)
         # Training the main model first
         X_train, X_test, y_train, y_test = train_test_split(X, y)
 
@@ -180,5 +185,5 @@ class Sc2Network():
 
 if __name__ == "__main__":
     nn = Sc2Network()
-    nn.train_model(epochs=10, batch_size=64, verbose=1, min_score=70)
+    nn.train_model(epochs=10, batch_size=64, verbose=1, min_score=60)
     nn.save_model('model')
