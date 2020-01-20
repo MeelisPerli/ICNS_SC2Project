@@ -24,11 +24,11 @@ def _xy_locs(mask):
     y, x = mask.nonzero()
     return list(zip(x, y))
 
-# TODO: rename bot.
-class TestAgent(base_agent.BaseAgent):
+
+class Bob(base_agent.BaseAgent):
 
     def setup(self, obs_spec, action_spec):
-        super(TestAgent, self).setup(obs_spec, action_spec)
+        super(Bob, self).setup(obs_spec, action_spec)
 
         if "feature_units" not in obs_spec:
             raise Exception(
@@ -44,7 +44,7 @@ class TestAgent(base_agent.BaseAgent):
         # self.model.model.summary()
 
     def step(self, obs):
-        super(TestAgent, self).step(obs)
+        super(Bob, self).step(obs)
         avb = obs.observation.available_actions
 
         X = self._get_unit_data(obs)
@@ -108,15 +108,15 @@ class TestAgent(base_agent.BaseAgent):
 
         x += getUnitsData(marines, 9, True)
         x += getUnitsData(enemies, 10, True)
-        x.append(self.steps)
-        x.append(len(marines))
-        x.append(len(enemies))
+        x.append(self.steps/1900)
+        x.append(len(marines)/10)
+        x.append(len(enemies)/10)
         return np.asarray([x], dtype=np.dtype(np.float32))
 
     # Writes the score to a file
     # Resets some values to default
     def reset(self):
-        super(TestAgent, self).reset()
+        super(Bob, self).reset()
         with open("scores_test.txt", "a") as f:
             f.write(str(self.score) + '\n')
         self.score = 0
